@@ -1,0 +1,48 @@
+{
+	"name": "@michivy/react",
+	"version": "1.0.0",
+	"description": "",
+	"license": "MIT",
+	"main": "./dist/index.js",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"./dist/**/*.{js,mjs}",
+		"./dist/**/*.d.ts"
+	],
+	"scripts": {
+		"build": "tsc"
+	},
+	"homepage": "https://example.com",
+	"repository": {
+		"type": "git",
+		"url": "https://example.com",
+		"directory": "packages/michivy"
+	},
+	"author": {
+		"name": "yuNuki",
+		"email": "aaa@yunukish.jp",
+		"url": "https://example.com"
+	},
+	"bugs": {
+		"url": "https://example.com"
+	},
+	"keywords": [],
+	"dependencies": {
+		"@floating-ui/react-dom": "^2.1.6",
+		"clsx": "^2.1.1",
+		"react": "18.2.0",
+		"react-dom": "18.2.0",
+		"tailwind-merge": "^3.3.1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.3.4",
+		"@types/react": "^18.2.43",
+		"@types/react-dom": "18.3.5",
+		"typescript": "^5.9.3"
+	},
+	"peerDependencies": {
+		"react": ">=18"
+	},
+	"sideEffects": false
+}

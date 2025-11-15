@@ -1,0 +1,8 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - run: npm run check
+      glob: "*.{js,ts,jsx,tsx}"
+post-merge:
+  jobs:
+    - run: pnpm i
