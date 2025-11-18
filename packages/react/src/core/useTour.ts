@@ -11,10 +11,12 @@ export interface UseTourReturnValue {
 	readonly isRunning: boolean | undefined;
 	readonly stepIndex: number | undefined;
 	readonly steps: Steps | undefined;
+	readonly metadata: any;
 	go: (nextIndex: number) => void;
 	next: () => void;
 	prev: () => void;
-	setSteps: (value: Steps | ((prev: Steps) => Steps)) => void;
+	setMetadata: (value: any | ((prev: any) => any)) => any | undefined;
+	setSteps: (value: Steps | ((prev: Steps) => Steps)) => Steps | undefined;
 	skip: () => void;
 	start: () => void;
 	stop: () => void;
@@ -23,13 +25,19 @@ export interface UseTourReturnValue {
 export function useTour(tourKey?: string) {
 	const [metadata, setTourMetadata] = useAtom(TourMetadataAtom);
 
-	const key = tourKey || metadata.currentTourKey;
+	const key = tourKey || metadata.currentTourKey || "";
 
 	const [tour, updateTour] = useTourState(key);
 
 	const go = useCallback(
 		(nextIndex: number): void => {
-			updateTour({ stepIndex: nextIndex });
+			updateTour((prev) => {
+				if (nextIndex > prev.steps.length - 1) {
+					console.warn(`step ${nextIndex} not found`);
+					return {};
+				}
+				return { stepIndex: nextIndex };
+			});
 		},
 		[updateTour],
 	);
@@ -55,12 +63,24 @@ export function useTour(tourKey?: string) {
 	// 	[updateTour],
 	// );
 
+	const setMetadata = useCallback(
+		(value: any | ((prev: any) => any)) => {
+			const state = updateTour((prev) => {
+				const metadata = isFunction(value) ? value(prev.steps) : value;
+				return { metadata };
+			});
+			return state?.metadata;
+		},
+		[updateTour],
+	);
+
 	const setSteps = useCallback(
 		(value: Steps | ((prev: Steps) => Steps)) => {
-			updateTour((prev) => {
+			const state = updateTour((prev) => {
 				const nextSteps = isFunction(value) ? value(prev.steps) : value;
 				return { steps: nextSteps };
 			});
+			return state?.steps;
 		},
 		[updateTour],
 	);
@@ -96,9 +116,13 @@ export function useTour(tourKey?: string) {
 		get steps() {
 			return tour?.steps;
 		},
+		get metadata() {
+			return tour?.metadata;
+		},
 		go,
 		next,
 		prev,
+		setMetadata,
 		setSteps,
 		skip,
 		start,

@@ -34,11 +34,15 @@ const Overlay = forwardRef<HTMLDivElement, OverlayProps>((props, ref) => {
 			role="presentation"
 			ref={ref}
 			style={{
-				position: "fixed",
+				position: "absolute",
 				inset: 0,
+				zIndex: 9999,
+				background: "rgba(0,0,0,0.45)",
+				overflow: "hidden",
 				height: getDocumentHeight(),
 				cursor: disabled ? "default" : "pointer",
 				pointerEvents: mouseOverSpotlight ? "none" : "auto",
+				mixBlendMode: "hard-light",
 				...style,
 			}}
 			className={cn("michivy__overlay", className)}

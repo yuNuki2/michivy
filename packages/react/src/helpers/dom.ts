@@ -24,8 +24,10 @@ export function getElement(query: string): Element | null {
 	} catch {
 		try {
 			result = document.querySelector(query);
-		} catch {
-			console.error();
+		} catch (e) {
+			if (process.env.NODE_ENV !== "production") {
+				console.error(e);
+			}
 			result = null;
 		}
 	}
@@ -93,13 +95,24 @@ export function getClientRect(element: Element | null): DOMRect | null {
 	return element.getBoundingClientRect();
 }
 
-export function scrollParent(element: Element | null): Element {
-	while (element && element !== document.body) {
-		const style = getComputedStyle(element);
-		if (/(auto|scroll)/.test(style.overflowY)) return element;
-		element = element.parentElement;
+// export function scrollParent(element: Element | null): Element {
+// 	while (element && element !== document.body) {
+// 		const style = getComputedStyle(element);
+// 		if (/(auto|scroll)/.test(style.overflowY)) return element;
+// 		element = element.parentElement;
+// 	}
+// 	return document.scrollingElement || document.documentElement;
+// }
+
+export function scrollParent(el: Element | null): Element {
+	let parent = el?.parentElement;
+	while (parent) {
+		const style = getComputedStyle(parent);
+		const overflowStyles = style.overflow + style.overflowY + style.overflowX;
+		if (/(auto|scroll)/.test(overflowStyles)) {
+			return parent;
+		}
+		parent = parent.parentElement;
 	}
 	return document.scrollingElement || document.documentElement;
 }
-
-window.scrollTo();

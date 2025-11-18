@@ -52,13 +52,35 @@ return (
 ```
 
 ### Type Safe
-```ts
-const useMyTour = createUseTour<"tour1" | "tour2">();
+```jsx
+const {
+	Michivy: Mychivy,
+	MichivyProvider: MychivyProvider,
+	useTour: useMyTour,
+} = createMichivy<"tour1" | "tour2">();
+
+function Sample() {
+	// type safe!
+	const tour = useMyTour("tour1");
+
+	return (
+		<MychivyProvider
+			// type safe!
+			initialTours={{ tour1: [{ target: "#sample1", content: "content1" }] }}
+		>
+			<Mychivy
+				// type safe!
+				name="tour1"
+				steps={[{ target: "#sample1", content: "content1" }]}
+			/>
+		</MychivyProvider>
+	);
+}
 ```
 
 ### Provider
 By default it is providerless, but you can use a provider. In this case, you can control different tours for each provider.
-```ts
+```jsx
 <MichivyProvider
   initialTours={{
     tour1: [

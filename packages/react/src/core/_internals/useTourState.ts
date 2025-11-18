@@ -7,42 +7,52 @@ type UpdateTourStateAction =
 	| Partial<TourState>
 	| ((prev: TourState) => Partial<TourState>);
 
-type UpdateTourStore = (value: UpdateTourStateAction) => void;
+type UpdateTourStore = (value: UpdateTourStateAction) => TourState;
 
-export function useTourState(
-	key: string | null,
-): [TourState | undefined, UpdateTourStore] {
+export function useTourState(key: string): [TourState | undefined, UpdateTourStore] {
 	const store = useTours();
 
-	// const state = getAtomState(store, key);
-	const state = key ? store.get(key) : null;
+	const genTourState = useCallback(
+		(key: string) => {
+			return store.get(key);
+		},
+		[store],
+	);
 
 	const subscribe = useCallback(
 		(callback: VoidFunction) => {
+			const state = genTourState(key);
+			console.info("subscribe: ", state);
 			state?.listeners.add(callback);
 			return () => {
 				state?.listeners.delete(callback);
 			};
 		},
-		[state?.listeners],
+		[key, genTourState],
 	);
 
 	const getSnapshot = useCallback(() => {
+		const state = genTourState(key);
 		return state?.value;
-	}, [state?.value]);
+	}, [key, genTourState]);
 
 	const value = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
 	const update = useCallback(
 		(value: UpdateTourStateAction) => {
-			if (!state) return;
+			const state = genTourState(key);
+			if (!state) {
+				throw new Error(`Tour with key ${key} does not exist.`);
+			}
 			const nextValue = isFunction(value) ? value(state.value) : value;
 			state.value = { ...state.value, ...nextValue };
 			for (const listener of state.listeners) {
 				listener();
 			}
+			console.info("updated: ", state);
+			return state.value;
 		},
-		[state],
+		[key, genTourState],
 	);
 
 	return [value, update];

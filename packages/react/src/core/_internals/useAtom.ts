@@ -1,7 +1,6 @@
 import { useCallback, useSyncExternalStore } from "react";
 import type { Atom, AtomState } from "../../types";
 
-// biome-ignore lint/suspicious/noExplicitAny: allow any
 const store = new WeakMap<Atom<any>, AtomState<any>>();
 
 export function atom<T>(value: T): Atom<T> {
@@ -19,7 +18,7 @@ function getAtomState<T>(atom: Atom<T>) {
 	return state;
 }
 
-export function useAtom<T>(atom: Atom<T>): [T, (value: T) => void] {
+export function useAtom<T>(atom: Atom<T>): [T, (value: T) => T] {
 	const state = getAtomState(atom);
 
 	const subscribe = useCallback(
@@ -44,6 +43,7 @@ export function useAtom<T>(atom: Atom<T>): [T, (value: T) => void] {
 			for (const listener of state.listeners) {
 				listener();
 			}
+			return state.value;
 		},
 		[state],
 	);

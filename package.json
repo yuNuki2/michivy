@@ -1,46 +1,22 @@
 {
 	"name": "michivy",
-	"version": "1.0.0",
-	"description": "Conform view adapter for react",
+	"private": true,
 	"license": "MIT",
-	"main": "./dist/index.js",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.ts",
-	"files": [
-		"./dist/**/*.{js,mjs}",
-		"./dist/**/*.d.ts"
-	],
 	"scripts": {
+		"dev": "pnpm --filter ./examples/nextjs dev",
+		"build": "turbo build",
+		"build:watch": "turbo watch",
 		"check": "pnpm exec biome check --write"
 	},
-	"homepage": "https://example.com",
-	"repository": {
-		"type": "git",
-		"url": "https://example.com",
-		"directory": "packages/michivy"
-	},
-	"author": {
-		"name": "yuNuki",
-		"email": "aaa@yunukish.jp",
-		"url": "https://example.com"
-	},
-	"bugs": {
-		"url": "https://example.com"
-	},
-	"keywords": [],
 	"devDependencies": {
 		"@biomejs/biome": "2.3.4",
 		"lefthook": "^2.0.4",
 		"turbo": "^2.6.1",
 		"typescript": "^5.9.3"
 	},
-	"peerDependencies": {
-		"react": ">=18"
-	},
 	"engines": {
 		"pnpm": "9.15.9",
 		"npm": "please_use_pnpm_instead"
 	},
-	"packageManager": "pnpm@9.15.9",
-	"sideEffects": false
+	"packageManager": "pnpm@9.15.9"
 }

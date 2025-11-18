@@ -1,10 +1,10 @@
 import { useRef } from "react";
-import { createUseTour } from "../core/createTourProxy";
+import { createMichivy } from "../core/createMichivy";
 import { useTour } from "../core/useTour";
-import Michivy from "./Michivy";
-import MichivyProvider from "./MichivyProvider";
+import { Michivy } from "./Michivy";
+import { MichivyProvider } from "./MichivyProvider";
 
-function A() {
+export function A() {
 	const buttonRef = useRef<HTMLButtonElement>(null);
 
 	return (
@@ -26,7 +26,7 @@ function A() {
 	);
 }
 
-function B() {
+export function B() {
 	const { currentTour, stepIndex, skip } = useTour();
 
 	return (
@@ -40,7 +40,7 @@ function B() {
 	);
 }
 
-function C() {
+export function C() {
 	return (
 		<MichivyProvider
 			initialTours={{
@@ -59,4 +59,28 @@ function C() {
 	);
 }
 
-const useMyTour = createUseTour<"tour1" | "tour2">();
+const {
+	Michivy: Mychivy,
+	MichivyProvider: MychivyProvider,
+	useTour: useMyTour,
+} = createMichivy<"tour1" | "tour2">();
+
+export function Sample() {
+	// type safe!
+	const tour = useMyTour("tour1");
+
+	tour.next();
+
+	return (
+		<MychivyProvider
+			// type safe!
+			initialTours={{ tour1: [{ target: "#sample1", content: "content1" }] }}
+		>
+			<Mychivy
+				// type safe!
+				name="tour1"
+				steps={[{ target: "#sample1", content: "content1" }]}
+			/>
+		</MychivyProvider>
+	);
+}

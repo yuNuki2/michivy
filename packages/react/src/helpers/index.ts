@@ -1,5 +1,6 @@
-import type { UseFloatingOptions } from "@floating-ui/react-dom";
+import type { ReactNode } from "react";
 import type { GenericFunction, Placement } from "../types";
+import type { UseFloatingOptions } from "../types/floating";
 
 export function isString(value: unknown): value is string {
 	return typeof value === "string";
@@ -7,6 +8,23 @@ export function isString(value: unknown): value is string {
 
 export function isFunction(value: unknown): value is GenericFunction {
 	return typeof value === "function";
+}
+
+export function isPlainObject(value: unknown): value is Record<PropertyKey, unknown> {
+	if (!value || typeof value !== "object") {
+		return false;
+	}
+	const proto = Object.getPrototypeOf(value) as typeof Object.prototype | null;
+	const hasObjectPrototype =
+		proto === null || proto === Object.prototype || Object.getPrototypeOf(proto) === null;
+	if (!hasObjectPrototype) {
+		return false;
+	}
+	return Object.prototype.toString.call(value) === "[object Object]";
+}
+
+export function isReactNode(value: unknown): value is ReactNode {
+	return isPlainObject(value) && "$$typeof" in value;
 }
 
 export function noop() {}

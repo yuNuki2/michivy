@@ -32,15 +32,12 @@ export interface StepType {
 	title?: string | undefined;
 }
 
-export interface State {
-	stepIndex: number;
-}
-
 export interface TourState {
 	currentStep: StepType | null;
 	isRunning: boolean;
 	stepIndex: number;
 	steps: Steps;
+	metadata?: any;
 
 	// internal
 	_id: string;
@@ -76,7 +73,6 @@ export interface AtomState<T> {
 
 export type Steps = Array<StepType>;
 
-// biome-ignore lint/suspicious/noExplicitAny: allow any
 export type GenericFunction = (...args: any[]) => any;
 
 export type Expand<T> = T extends infer U ? { [K in keyof U]: U[K] } : never;

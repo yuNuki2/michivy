@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"includes": ["**", "!node_modules"]
+		"includes": ["**", "!**/node_modules", "!**/dist", "!**/.next"]
 	},
 	"formatter": {
 		"enabled": true,
@@ -17,7 +17,16 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"suspicious": {
+				"noConsole": {
+					"level": "info",
+					"options": {
+						"allow": ["info", "warn", "error"]
+					}
+				},
+				"noExplicitAny": "off"
+			}
 		}
 	},
 	"javascript": {
@@ -31,6 +40,11 @@
 			"source": {
 				"organizeImports": "off"
 			}
+		}
+	},
+	"css": {
+		"parser": {
+			"tailwindDirectives": true
 		}
 	}
 }
